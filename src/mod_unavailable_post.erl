@@ -28,7 +28,7 @@
 -module(mod_unavailable_post).
 -author('adam.v.duke@gmail.com').
 
--behaviour(gen_mod).
+-behavior(gen_mod).
 
 -export([start/2,
 	 init/2,
@@ -43,7 +43,9 @@
 
 start(Host, Opts) ->
     ?INFO_MSG("Starting mod_unavailable_post", [] ),
-    register(?PROCNAME,spawn(?MODULE, init, [Host, Opts])),  
+    register(gen_mod:get_module_proc(Host, ?PROCNAME),
+	     proc_lib:spawn(?MODULE, init, Opts)),
+%%    register(?PROCNAME,spawn(?MODULE, init, [Host, Opts])),  
     ok.
 
 %%% unset_presence_hook(User, Server, Resource, Status) -> void()

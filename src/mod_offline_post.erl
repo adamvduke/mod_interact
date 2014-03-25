@@ -42,8 +42,14 @@
 -include("logger.hrl").
 
 start(Host, Opts) ->
-    ?INFO_MSG("Starting mod_offline_post", [] ),
-    register(?PROCNAME,spawn(?MODULE, init, [Host, Opts])),  
+    ?INFO_MSG("Starting mod_offline_post with Opts: ~p", [Opts]),
+    AuthToken = gen_mod:get_module_opt(Host, ?MODULE, auth_token, fun(S) -> iolist_to_binary(S) end, list_to_binary("default")),
+    PostUrl = gen_mod:get_module_opt(Host, ?MODULE, post_url, fun(S) -> iolist_to_binary(S) end, list_to_binary("default")),
+    ?INFO_MSG("\n\nAuthToken: ~p - PostUrl: ~p\n", [AuthToken, PostUrl]),
+%%    register(?PROCNAME,spawn(?MODULE, init, [Host, Opts])),  
+    register(gen_mod:get_module_proc(Host, ?PROCNAME),
+	     proc_lib:spawn(?MODULE, init, Opts)),
+    ?INFO_MSG("REGISTERED", [] ),
     ok.
 
 init(Host, _Opts) ->
