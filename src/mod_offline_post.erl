@@ -71,7 +71,7 @@ send_notice(From, To, Packet) ->
           "from=", From#jid.luser, Sep,
           "body=", url_encode(binary_to_list(Body)), Sep,
           "access_token=", Token],
-        ?INFO_MSG("Sending post request to ~s with body \"~s\"", [PostUrl, Post]),
+        lager:info("Sending post request to ~s with body \"~s\"", [PostUrl, Post]),
         httpc:request(post, {binary_to_list(PostUrl), [], "application/x-www-form-urlencoded", list_to_binary(Post)},[],[]),
         ok;
       true ->
