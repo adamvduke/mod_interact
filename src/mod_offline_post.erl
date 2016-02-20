@@ -59,8 +59,8 @@ stop(Host) ->
     ok.
 
 send_notice(From, To, Packet) ->
-    Type = xml:get_tag_attr_s(list_to_binary("type"), Packet),
-    Body = xml:get_path_s(Packet, [{elem, list_to_binary("body")}, cdata]),
+    Type = fxml:get_tag_attr_s(list_to_binary("type"), Packet),
+    Body = fxml:get_path_s(Packet, [{elem, list_to_binary("body")}, cdata]),
     Token = gen_mod:get_module_opt(To#jid.lserver, ?MODULE, auth_token, fun(S) -> iolist_to_binary(S) end, list_to_binary("")),
     PostUrl = gen_mod:get_module_opt(To#jid.lserver, ?MODULE, post_url, fun(S) -> iolist_to_binary(S) end, list_to_binary("")),
 
